@@ -1,0 +1,53 @@
+import barrileteCosmico.*
+import localidades.*
+import usuarios.*
+import transportes.*
+import viajes.*
+
+describe "test de el BarrileteCosmico" {
+		
+	test "pablo_hari_inicia_con_0_millas_de_viajes,_pues_es_nuevo_en_esto " {
+		assert.equals(0,pabloHari.obtenerKilometros())	}
+	
+	test "pablo hari puede viajar a lastToninas en autoBus" {
+		const colectivo = new Transporte(0,20)
+		const viajeSorpresa = new Viaje(silverSea,colectivo)
+		assert.that(pabloHari.puedeViajar(viajeSorpresa))	}
+		
+	test "pablo hari puede viajar a lastToninas en flota " {
+		const flota = new Transporte(0,30)
+		const viajeRegalo = new Viaje(silverSea,flota)
+		assert.that(pabloHari.puedeViajar(viajeRegalo))	}
+		
+	test "pablo hari luego de viajar a lastToninas en flota no le queda dinero " {
+		const flota = new Transporte(0,30)
+		const viajeRegalo = new Viaje(silverSea,flota)
+		pabloHari.realizarViaje(viajeRegalo)
+		assert.equals(0,pabloHari.dineroQueCuenta())	}
+		
+	test "pablo hari no puedeViajar a lastToninas en flota con cama" {
+		const flotaCama = new Transporte(0,31)
+		const viajeRegalo = new Viaje(silverSea,flotaCama)
+		assert.notThat(pabloHari.puedeViajar(viajeRegalo))	} // este se puede asi, pues puedeViajar devuelve un Bool y que pasa cuando NO devuelve un Bool, es decir es una accion??
+	
+	test "pablo hari no puede realizarViajar a lastToninas en flota con cama" {// cuando es directamente una accion
+		const flotaCama = new Transporte(0,31)
+		const viajeRegalo = new Viaje(silverSea,flotaCama)
+		assert.throwsExceptionWithMessage("viaje demasiado caro eliga otro porfavor",{pabloHari.realizarViaje(viajeRegalo)})	}
+		
+	test "pablo hari luego de viajar a lastToninas en flota es 5 millas " {// 5 millas pues es la distancia entre su casa y lastToninas y empezo con 0 millas
+		const flota = new Transporte(0,30)
+		const viajeRegalo = new Viaje(silverSea,flota)
+		pabloHari.realizarViaje(viajeRegalo)
+		assert.equals(5,pabloHari.obtenerKilometros())	}
+	
+	test "funciona correctamente el realizar viajes de: barrilete Cosmico " {
+		const esteban = new Usuario([],10000,[],casaDeHari,"EstebanKito",0)//agregado_para_los_test_(esteban_esta)_inicializado_con_0_viajes
+		const colectivo = new Transporte(0,20)
+		const flotaCama = new Transporte(0,31)
+		const flota = new Transporte(0,30)
+		barrileteCosmico.mediosDeTransporte([colectivo,flotaCama,flota])
+		barrileteCosmico.realizarViaje(esteban,garlicSea)
+		assert.equals(1,esteban.cantidadDeViajes())	}
+	
+}
