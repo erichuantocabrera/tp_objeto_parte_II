@@ -1,33 +1,36 @@
-import localidades.*//por la casa de Hari
+import viajes.*// por el const unViaje 
+import barrileteCosmico.*// por la referencia barrileteCosmico
 
-class UserException inherits Exception {} 
+class UserExceptionEstoyPobre inherits Exception {} 
 
 class Usuario{
-	var viajesQueRealizo 
+	var viajesQueRealizo = []// todos los usuarios deben empezar con 0 viajes
     var property dineroQueCuenta 
     var siguiendo 
-    var localidadDeOrigen 
+    var property localidadDeOrigen 
     var property nombreDeUsuario
-    var kilometrosRecorridos
-    
-    constructor (_viajesQueRealizo,_dineroQueCuenta,_siguiendo,_localidadDeOrigen,_nombreDeUsuario,_kilometrosRecorridos){
-        viajesQueRealizo =_viajesQueRealizo 
-    	dineroQueCuenta =_dineroQueCuenta 
-    	siguiendo = _siguiendo 
-    	localidadDeOrigen = _localidadDeOrigen
-   		nombreDeUsuario	= _nombreDeUsuario
-   		kilometrosRecorridos = _kilometrosRecorridos		}
+    //var kilometrosRecorridos// es algo redundante se puede realizar un metodo
+   	
+	constructor (dinero,seguidores,origen,usuario){
+        dineroQueCuenta =dinero
+    	siguiendo = seguidores 
+    	localidadDeOrigen = origen
+   		nombreDeUsuario	= usuario }
    		
-   	method puedeViajar(unViaje) = dineroQueCuenta >=  unViaje.calcularPrecioViaje(localidadDeOrigen)
-	method realizarViaje(unViaje){
+   	method puedeViajar(unViaje) = dineroQueCuenta >=  unViaje.calcularPrecioViaje()
+	method realizarViaje(unDestino) {
+		const unViaje = barrileteCosmico.armaViaje(self,unDestino)
 		if(self.puedeViajar(unViaje)){
 			viajesQueRealizo.add(unViaje)
-			dineroQueCuenta = dineroQueCuenta - unViaje.calcularPrecioViaje(localidadDeOrigen)
-			kilometrosRecorridos = kilometrosRecorridos + unViaje.distanciaARecorrer(localidadDeOrigen)
+			dineroQueCuenta = dineroQueCuenta - unViaje.calcularPrecioViaje()
+			//kilometrosRecorridos += kilometrosRecorridos + unViaje.distanciaARecorrer(localidadDeOrigen)
+            // realizar un metodo que calcule el recorrido de viajes usando lista de viajes que realiza
 			localidadDeOrigen = unViaje.destino()		}
 		else {
-			throw new UserException(message = "viaje demasiado caro eliga otro porfavor")}	}
- 	method obtenerKilometros() = kilometrosRecorridos
+			throw new UserExceptionEstoyPobre(message = "viaje demasiado caro eliga otro porfavor")
+		}
+	}
+ 	//method obtenerKilometros() = kilometrosRecorridos
  	method agregarUsuario(usuario) {siguiendo.add(usuario) }
 	method seguirUsuario(usuario) {
 		self.agregarUsuario(usuario)
@@ -38,6 +41,5 @@ class Usuario{
    	
 }
 
-const pabloHari = new Usuario([],1500,[],casaDeHari,"PHari",0)// agregado_casaDeHari_para_su_correcta_inicializacion.
 
 

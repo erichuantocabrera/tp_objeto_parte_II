@@ -1,11 +1,12 @@
 class Viaje{
+	var origen
 	var property destino
 	var transporte
-	constructor (_destino,_transporte){
-		destino = _destino
-		transporte = _transporte
+	constructor (unOrigen,unDestino,unTransporte){
+		origen = unOrigen
+		destino = unDestino
+		transporte =unTransporte
 	}
-	method distanciaARecorrer(origen) = destino.distanciaHasta(origen)
-	method calcularPrecioViaje(origen) =  destino.precio() + (self.distanciaARecorrer(origen) * transporte.costoPorKilometro())
+	method distanciaARecorrer() = origen.distanciaHasta(destino)
+	method calcularPrecioViaje() = destino.precio(destino,transporte)
 }
-
