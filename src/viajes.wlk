@@ -1,3 +1,5 @@
+import transportes.*
+
 class Viaje{
 	var origen
 	var property destino
@@ -5,8 +7,8 @@ class Viaje{
 	constructor (unOrigen,unDestino,unTransporte){
 		origen = unOrigen
 		destino = unDestino
-		transporte =unTransporte
+		transporte = unTransporte
 	}
 	method distanciaARecorrer() = origen.distanciaHasta(destino)
-	method calcularPrecioViaje() = destino.precio(destino,transporte)
+	method calcularPrecioViaje() = destino.precio() + transporte.costoPorDistancia(self.distanciaARecorrer())
 }

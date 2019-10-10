@@ -6,11 +6,11 @@ class Localidad {
 	const property nombre
 	const property kilometroDeUbicacion  
 	
-	constructor(_precio,_equipajes,_nombre,_kilometro) {
-		precio = _precio
-		equipajes = _equipajes
-		nombre = _nombre
-		kilometroDeUbicacion = _kilometro	  }
+	constructor(unPrecio,equipaje,unNombre,unKilometro) {
+		precio = unPrecio
+		equipajes = equipaje
+		nombre = unNombre
+		kilometroDeUbicacion = unKilometro	  }
 	
 	method darDescuento(descuento){ 
 		precio = precio * (1 - (descuento/100))
@@ -18,8 +18,8 @@ class Localidad {
 	method esDestinoPeligroso() = equipajes.any({equipaje => equipaje.contains('Vacuna')})
 	method contieneEquipaje(unaCosa) = equipajes.contains(unaCosa) 
 	method esImportante() = precio > 2000
-	method distanciaHasta(destino) = (kilometroDeUbicacion - destino.kilometroDeUbicacion()).abs()
-	method precio(destino,transporte) = precio + (self.distanciaHasta(destino) * transporte.costoPorKilometro())
-
+	method distanciaHasta(localidad) = (kilometroDeUbicacion - localidad.kilometroDeUbicacion()).abs()
+	//method precio(localidad,transporte) = precio + (self.distanciaHasta(localidad) * transporte.costoPorKilometro())
+	method precio() = precio
 }
 

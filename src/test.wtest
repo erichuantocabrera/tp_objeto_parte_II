@@ -4,50 +4,104 @@ import usuarios.*
 import transportes.*
 import viajes.*
 
-describe "test de el BarrileteCosmico" {
+describe "test el BarrileteCosmico" {
+	
+	const casaDeHari = new Localidad(0,[],"casa",0)// pues todos los usuarios deben tener una localidad de origen
+	const pabloHari = new Usuario(1500,[],casaDeHari,"PHari")
+	const esteban = new Usuario(10000,[],casaDeHari,"EstebanKito")
 		
-	test "pablo_hari_inicia_con_0_millas_de_viajes,_pues_es_nuevo_en_esto " {
+	const garlicSea = new Localidad(2500,["Caña de Pescar","Piloto"],"Garlic's Sea",2)
+	const silverSea = new Localidad(1350,["Protector Solar","Equipo de Buceo"],"Silver's Sea",5)
+	const lastToninas = new Localidad(3500,["Vacuna Gripal","Vacuna B","Necronomicon"],"Last Toninas",10)
+	const goodAirs = new Localidad(1500,["Cerveza","Protector Solar"],"Good Airs",20)
+	
+	const colectivo = new Transporte(0,20)
+	const flota = new Transporte(0,30)
+	const avion = new Transporte(0,60)
+		
+	const viajeASilverSeaEnFlota = new Viaje(casaDeHari,silverSea,flota)
+	const viajeALastToninasEnFlota = new Viaje(casaDeHari,lastToninas,flota)
+	const viajeAGarlicSeaEnAvion = new Viaje(casaDeHari,garlicSea,avion)
+	const viajeASilverSeaEnAvion = new Viaje(casaDeHari,silverSea,avion)
+	
+	fixture{
+		barrileteCosmico.mediosDeTransporte([colectivo,avion,flota])
+		barrileteCosmico.destinos([garlicSea,silverSea,lastToninas,goodAirs])
+	}
+	
+	
+	// ======================================= TEST PRIMERA VERSION  =====================================================
+	test "los_destinos_mas_importantes_del_barrileteCosmico"{
+		assert.equals([garlicSea,lastToninas],barrileteCosmico.destinosImportantes()) }
+	
+	test "aplicar_un_25%_de_descuento_a_lastToninas" {
+		lastToninas.darDescuento(25)
+		assert.equals(2625,lastToninas.precio()) }
+	
+	test "luego_de_aplicar_un_25%_de_descuento_a_last_Toninas_se_le_agrega_la_leyenda_de_certificado_de_descuento" {
+		lastToninas.darDescuento(25)
+		assert.that(lastToninas.contieneEquipaje("Certificado de descuento"))	}
+	
+	test "silverSea_no_es_un_destino_peligroso" {
+		assert.notThat(silverSea.esDestinoPeligroso()) }
+	
+	test "aplicar_un_descuento_del_15%_a_todos_los_destinos_de_barrilete_Cosmico" {
+		barrileteCosmico.destinos([garlicSea,silverSea,lastToninas,goodAirs])
+		barrileteCosmico.aplicarDescuentosADestinos(15)
+		assert.equals(2125,garlicSea.precio())
+		assert.equals(1147.5,silverSea.precio())
+		assert.equals(2975,lastToninas.precio())
+		assert.equals(1275,goodAirs.precio())
+		assert.that(garlicSea.contieneEquipaje("Certificado de descuento"))
+		assert.that(silverSea.contieneEquipaje("Certificado de descuento"))
+		assert.that(lastToninas.contieneEquipaje("Certificado de descuento"))
+		assert.that(goodAirs.contieneEquipaje("Certificado de descuento"))	}
+	
+	test "los_destinos_mas_peligrosos_hasta_el_momento" {
+		assert.equals([lastToninas],barrileteCosmico.destinosPeligrosos()) }
+	
+	test "barrilete_Cosmico_es_una_empresa_extrema" {
+		assert.that(barrileteCosmico.esEmpresaExtrema())	}
+	
+	test "conocer_la_carta_de_destinos_de_barrileteCosmico" {
+		assert.equals(["Garlic's Sea","Silver's Sea","Last Toninas","Good Airs"],barrileteCosmico.cartaDeDestinos()) }
+	
+	// ======================================= TEST SEGUNDA VERSION  =====================================================
+	
+	test "pablo_hari_no_puede_viajar_a_lastToninas_en_flota" {
+		assert.notThat(pabloHari.puedeViajar(viajeALastToninasEnFlota))	}
+		
+	test "pablo_hari_puede_viajar_a_silverSea_en_flota " {
+		assert.that(pabloHari.puedeViajar(viajeASilverSeaEnFlota))	}
+			
+	test "pablo_hari_no_puedeViajar_a_garlicSea_en_avion" {
+		assert.notThat(pabloHari.puedeViajar(viajeAGarlicSeaEnAvion))	} // este se puede asi, pues puedeViajar devuelve un Bool y que pasa cuando NO devuelve un Bool, es decir en una accion??
+	
+	test "pablo_hari_no_puede_realizarViajar_a_garlicSea_en_cualquier_medioDetransporte" {
+		// cuando_pablo_hari_desea_viajar_a_garlicSea_no_le_alcanza_el_dinero_sin_importar_el_mediodetransporte
+		assert.throwsExceptionWithMessage("viaje demasiado caro eliga otro porfavor",{pabloHari.realizarViaje(garlicSea)})	}   
+			
+	test "esteban_puedeViajar_a_silverSea_en_avion " {
+		assert.that(esteban.puedeViajar(viajeASilverSeaEnAvion))	}
+	
+	test "esteban_luego_de_viajar_a_silverSea_su_ubicacion_es_silverSea " {
+		esteban.realizarViaje(silverSea)
+		assert.equals(silverSea,esteban.localidadDeOrigen())	}
+		
+	test "esteba_inicia_con_0_millas_de_viajes,_pues_es_nuevo_en_esto " {
 		assert.equals(0,pabloHari.obtenerKilometros())	}
 	
-	test "pablo hari puede viajar a lastToninas en autoBus" {
-		const colectivo = new Transporte(0,20)
-		const viajeSorpresa = new Viaje(silverSea,colectivo)
-		assert.that(pabloHari.puedeViajar(viajeSorpresa))	}
+	test "esteban_luego_de_viajar_a_lastToninas_tiene_10_millas " {// 10 millas pues es la distancia entre su casa y lastToninas pues empezo con 0 millas
+		esteban.realizarViaje(lastToninas)
+		assert.equals(10,esteban.obtenerKilometros())	}
 		
-	test "pablo hari puede viajar a lastToninas en flota " {
-		const flota = new Transporte(0,30)
-		const viajeRegalo = new Viaje(silverSea,flota)
-		assert.that(pabloHari.puedeViajar(viajeRegalo))	}
-		
-	test "pablo hari luego de viajar a lastToninas en flota no le queda dinero " {
-		const flota = new Transporte(0,30)
-		const viajeRegalo = new Viaje(silverSea,flota)
-		pabloHari.realizarViaje(viajeRegalo)
-		assert.equals(0,pabloHari.dineroQueCuenta())	}
-		
-	test "pablo hari no puedeViajar a lastToninas en flota con cama" {
-		const flotaCama = new Transporte(0,31)
-		const viajeRegalo = new Viaje(silverSea,flotaCama)
-		assert.notThat(pabloHari.puedeViajar(viajeRegalo))	} // este se puede asi, pues puedeViajar devuelve un Bool y que pasa cuando NO devuelve un Bool, es decir es una accion??
+	test "esteban_luego_de_viajar_a_lastToninas_y_goodAirs_tiene_20_millas " {
+		esteban.realizarViaje(lastToninas)
+		esteban.realizarViaje(goodAirs)
+		assert.equals(20,esteban.obtenerKilometros())	}
 	
-	test "pablo hari no puede realizarViajar a lastToninas en flota con cama" {// cuando es directamente una accion
-		const flotaCama = new Transporte(0,31)
-		const viajeRegalo = new Viaje(silverSea,flotaCama)
-		assert.throwsExceptionWithMessage("viaje demasiado caro eliga otro porfavor",{pabloHari.realizarViaje(viajeRegalo)})	}
-		
-	test "pablo hari luego de viajar a lastToninas en flota es 5 millas " {// 5 millas pues es la distancia entre su casa y lastToninas y empezo con 0 millas
-		const flota = new Transporte(0,30)
-		const viajeRegalo = new Viaje(silverSea,flota)
-		pabloHari.realizarViaje(viajeRegalo)
-		assert.equals(5,pabloHari.obtenerKilometros())	}
-	
-	test "funciona correctamente el realizar viajes de: barrilete Cosmico " {
-		const esteban = new Usuario([],10000,[],casaDeHari,"EstebanKito",0)//agregado_para_los_test_(esteban_esta)_inicializado_con_0_viajes
-		const colectivo = new Transporte(0,20)
-		const flotaCama = new Transporte(0,31)
-		const flota = new Transporte(0,30)
-		barrileteCosmico.mediosDeTransporte([colectivo,flotaCama,flota])
-		barrileteCosmico.realizarViaje(esteban,garlicSea)
+	test "agregado_de_viaje_a_esteban (para_ver_si_funciona_correctamente_el_armado_de_viajes_de_barrileteCosmico)" {
+		esteban.realizarViaje(goodAirs)
 		assert.equals(1,esteban.cantidadDeViajes())	}
 	
 }

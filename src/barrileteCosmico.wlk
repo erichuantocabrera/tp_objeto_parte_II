@@ -1,7 +1,7 @@
 import viajes.*//por que se crea un viaje
 
 object barrileteCosmico{
-	var property destinos = []//[garlicSea,silverSea,lastToninas,goodAirs]
+	var property destinos = []
 	var property usuarios = []
 	var property mediosDeTransporte = []
 	

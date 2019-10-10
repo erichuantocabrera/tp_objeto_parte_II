@@ -1,9 +1,10 @@
 class Transporte {
 	var tiempo 
 	var costoPorKilometro
-	constructor(_tiempo,_costo) {
-		tiempo = _tiempo
-		costoPorKilometro = _costo	}
-	
+	constructor(unTiempo,unCosto) {
+		tiempo = unTiempo
+		costoPorKilometro = unCosto	}
+
+	method costoPorDistancia(distancia) = distancia * costoPorKilometro
 }
 
