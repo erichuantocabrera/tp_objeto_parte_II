@@ -7,34 +7,41 @@ import viajes.*
 describe "test el BarrileteCosmico" {
 	
 	const casaDeHari = new Localidad(0,[],"casa",0)// pues todos los usuarios deben tener una localidad de origen
-	const pabloHari = new Usuario(1500,[],casaDeHari,"PHari")
-	const esteban = new Usuario(10000,[],casaDeHari,"EstebanKito")
+	const pabloHari = new Usuario(1500,[],casaDeHari,"PHari",familiar)
+	const esteban = new Usuario(1000000,[],casaDeHari,"EstebanKito",empresarial)
 		
 	const garlicSea = new Localidad(2500,["Caña de Pescar","Piloto"],"Garlic's Sea",2)
 	const silverSea = new Localidad(1350,["Protector Solar","Equipo de Buceo"],"Silver's Sea",5)
 	const lastToninas = new Localidad(3500,["Vacuna Gripal","Vacuna B","Necronomicon"],"Last Toninas",10)
 	const goodAirs = new Localidad(1500,["Cerveza","Protector Solar"],"Good Airs",20)
 	
-	const colectivo = new Transporte(0,20)
-	const flota = new Transporte(0,30)
-	const avion = new Transporte(0,60)
-		
-	const viajeASilverSeaEnFlota = new Viaje(casaDeHari,silverSea,flota)
-	const viajeALastToninasEnFlota = new Viaje(casaDeHari,lastToninas,flota)
-	const viajeAGarlicSeaEnAvion = new Viaje(casaDeHari,garlicSea,avion)
-	const viajeASilverSeaEnAvion = new Viaje(casaDeHari,silverSea,avion)
+	const turboReactor = new Turbina(20)
 	
-	/*=================================================
-    const everest = new Montania (3000,["Vacuna B"],"everest",200,5500)
-    const cancun = new Playa (3000,["Vacuna B"],"everest",200,5500)
-    const paris = new CiudadHistorica()
+	const americanAirlines = new Avion(50,4,turboReactor)
+	const condorbus = new Micro (300)
+	const trenRoca = new Tren(100)
+	const titanic = new Barco(150,10)
+		
+	const viajeASilverSeaEnAvion = new Viaje(casaDeHari,silverSea,americanAirlines)
+	const viajeASilverSeaEnMicro = new Viaje(casaDeHari,silverSea,condorbus)
+	const viajeASilverSeaEnTren = new Viaje(casaDeHari,silverSea,trenRoca)  
+	const viajeASilverSeaEnBarco = new Viaje(casaDeHari,silverSea,titanic)
+	
+	const aconcagua = new Montania(3000,["Vacuna B"],"aconcagua",200,2500)
+	const everest = new Montania(3200,["Vacuna B"],"everest",200,5500)
+    const cancun = new Playa(1400,["Vacuna B"],"cancun",200)
+    const paris = new CiudadHistorica(10000,[],"ulala",250,5)
     
-     
-    * =================================== */
+    const viajeACancunEnAvion = new Viaje(casaDeHari,cancun,americanAirlines)
+	
 	
 	fixture{
-		barrileteCosmico.mediosDeTransporte([colectivo,avion,flota])
+		barrileteCosmico.mediosDeTransporte([americanAirlines,condorbus,trenRoca,titanic])
 		barrileteCosmico.destinos([garlicSea,silverSea,lastToninas,goodAirs])
+		empresarial.transportes([americanAirlines,condorbus,trenRoca,titanic])
+		estudiantil.transportes([americanAirlines,condorbus,trenRoca,titanic])
+		familiar.transportes([americanAirlines,condorbus,trenRoca,titanic])
+		
 	}
 	
 	
@@ -74,25 +81,32 @@ describe "test el BarrileteCosmico" {
 	test "conocer_la_carta_de_destinos_de_barrileteCosmico" {
 		assert.equals(["Garlic's Sea","Silver's Sea","Last Toninas","Good Airs"],barrileteCosmico.cartaDeDestinos()) }
 	
-	// ======================================= TEST SEGUNDA VERSION  =====================================================
+	// ======================================  TEST SEGUNDA VERSION  =====================================================
 	
-	test "pablo_hari_no_puede_viajar_a_lastToninas_en_flota" {
-		assert.notThat(pabloHari.puedeViajar(viajeALastToninasEnFlota))	}
+	test "pablo_hari_no_puede_viajar_a_SilverSea_En_Avion" {
+		assert.notThat(pabloHari.puedeViajar(viajeASilverSeaEnAvion))	}
 		
-	test "pablo_hari_puede_viajar_a_silverSea_en_flota " {
-		assert.that(pabloHari.puedeViajar(viajeASilverSeaEnFlota))	}
-			
-	test "pablo_hari_no_puedeViajar_a_garlicSea_en_avion" {
-		assert.notThat(pabloHari.puedeViajar(viajeAGarlicSeaEnAvion))	} // este se puede asi, pues puedeViajar devuelve un Bool y que pasa cuando NO devuelve un Bool, es decir en una accion??
+	test "pablo_hari_no_puede_viajar_a_SilverSea_En_Micro " {
+		assert.notThat(pabloHari.puedeViajar(viajeASilverSeaEnMicro))	}
+		
+	test "pablo_hari_no_puede_viajar_a_SilverSea_En_Tren" {
+		assert.notThat(pabloHari.puedeViajar(viajeASilverSeaEnTren))	}
+		
+	test "pablo_hari_no_puede_viajar_a_SilverSea_En_Barco " {
+		assert.notThat(pabloHari.puedeViajar(viajeASilverSeaEnBarco))	}
+		
+	//ahora_me_doy_cuenta_que_otra_forma_de_hacer_estos_cuatro_test_es:
+	test "pablo_hari_no_puede_realizarViajar_a_SilverSea_en_cualquier_medioDetransporte" {
+		assert.throwsExceptionWithMessage("viaje demasiado caro eliga otro porfavor",{pabloHari.realizarViaje(silverSea)})	}   
+	// pablo_hari_es_una_persona_con poco_dinero_por_lo_que_no_puede_viajar_a_ningun_lado_en_ningun_medio_de_transporte_por_ahora	
 	
-	test "pablo_hari_no_puede_realizarViajar_a_garlicSea_en_cualquier_medioDetransporte" {
-		// cuando_pablo_hari_desea_viajar_a_garlicSea_no_le_alcanza_el_dinero_sin_importar_el_mediodetransporte
-		assert.throwsExceptionWithMessage("viaje demasiado caro eliga otro porfavor",{pabloHari.realizarViaje(garlicSea)})	}   
-			
-	test "esteban_puedeViajar_a_silverSea_en_avion " {
+	test "esteban_puede_viajar_a_SilverSea_En_Avion" {
 		assert.that(esteban.puedeViajar(viajeASilverSeaEnAvion))	}
-	
-	test "esteban_luego_de_viajar_a_silverSea_su_ubicacion_es_silverSea " {
+		
+	test "esteban_puede_viajar_a_SilverSea_En_Barco " {
+		assert.that(esteban.puedeViajar(viajeASilverSeaEnBarco))	}
+			
+	test "esteban_luego_de_viajar_a_silverSea_su_ubicacion_es:_silverSea " {
 		esteban.realizarViaje(silverSea)
 		assert.equals(silverSea,esteban.localidadDeOrigen())	}
 		
@@ -111,20 +125,41 @@ describe "test el BarrileteCosmico" {
 	test "agregado_de_viaje_a_esteban (para_ver_si_funciona_correctamente_el_armado_de_viajes_de_barrileteCosmico)" {
 		esteban.realizarViaje(goodAirs)
 		assert.equals(1,esteban.cantidadDeViajes())	}
-		
-	/* 	test "el everest es si un destino peligroso"{	
-		assert.that(everest.esDestinoPeligroso())
-	}
-	test "la playa No es un destino peligroso"{	
-		assert.that(cancun.esDestinoPeligroso())
-	}
 	
-	test "la ciudad historica de paris es destacada"{
-		assert.that(paris.esDestacada())
-	}
-	test "el everest es un destino destacado"{
-		assert.that(everest.esDestacado())
-	}
-*/
+	// =======================================  TEST TERCERA VERSION   =======================================================
+	
+	test "el_aconcagua_no_es_peligrosa_aunque_se_necesite_una_vacuna"{	
+		assert.notThat(aconcagua.esDestinoPeligroso()) }
+	
+	test "el_everest_es_un_destino_peligroso"{	
+		assert.that(everest.esDestinoPeligroso()) }
+		
+	test "la_playa_No_es_un_destino_peligroso"{	
+		assert.notThat(cancun.esDestinoPeligroso()) }
+	
+	test "la_ciudad_historica_de_paris_es_destacada"{
+		assert.that(paris.esImportante()) }
+		
+	test "el_everest_es_un_destino_destacado"{
+		assert.that(everest.esImportante()) }
+		
+	test "pablo_hari_no_puede_viajar_a_cancun_en_avion" {
+		assert.notThat(pabloHari.puedeViajar(viajeACancunEnAvion)) }
+		
+	test "esteban_como_es_millonario_y_empresario_su_transporte_es_el_mas_Rapido_(avion)" {
+		assert.equals(americanAirlines,esteban.perfil().transporte() ) }
+	
+	test "esteban_realiza_el_viaje_a_cancun_en_avion" {
+		esteban.realizarViaje(cancun)
+		assert.equals(1,esteban.cantidadDeViajes())	}
+	
+	test "luego_de_realizar_su_viaje_a_cancun_a_esteban_le_queda_982600" {
+		esteban.realizarViaje(cancun)
+		assert.equals(982600,esteban.dineroQueCuenta())	}
+		
+	test "luego_de_viajar_a_cancun_y_al_everest_se_queda_en_el_everest" {
+		esteban.realizarViaje(cancun)
+		esteban.realizarViaje(everest)
+		assert.equals(everest,esteban.localidadDeOrigen()) }
 	
 }
