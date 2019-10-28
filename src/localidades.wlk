@@ -1,50 +1,38 @@
-import transportes.*
+import localidades.*
 
-class Localidad {
-	var precio
-	var equipajes
-	const property nombre
-	const property kilometroDeUbicacion  
-	
-	constructor(unPrecio,equipaje,unNombre,unKilometro) {
-		precio = unPrecio
-		equipajes = equipaje
-		nombre = unNombre
-		kilometroDeUbicacion = unKilometro	  }
-	
-	method darDescuento(descuento){ 
-		precio = precio * (1 - (descuento/100))
-		equipajes.add("Certificado de descuento")}
-	method esDestinoPeligroso() = equipajes.any({ equipaje => equipaje.contains('Vacuna') })
-	method contieneEquipaje(unaCosa) = equipajes.contains(unaCosa) 
-	method esImportante() = precio > 2000
-	method distanciaHasta(localidad) = (kilometroDeUbicacion - localidad.kilometroDeUbicacion()).abs()
-	method precio() = precio
-}
+class Playa inherits Localidad{
+//nunca es destino es peligroso
 
-class Playa inherits Localidad {
-	override method esDestinoPeligroso() = false
-}
+override method esDestinoPeligroso()=false
 
-class Montania inherits Localidad {
-	var alturaDeMontania
-	
+//es destino destacado si su precio es mayor a 2000
+method esDestinoDestacado()= self.esImportante()
+} 
+
+class Montania inherits Localidad{
+var property altura
+
 	constructor(unPrecio,equipaje,unNombre,unKilometro,alturaDeLaMoontania) = super(unPrecio,equipaje,unNombre,unKilometro) { 
-		alturaDeMontania = alturaDeLaMoontania }
-		
-	override method esDestinoPeligroso() = super() && (self.siEsMontaniaAlta())
-	method siEsMontaniaAlta() = alturaDeMontania > 5000
-	override method esImportante() = true
+		altura = alturaDeLaMoontania }
+//es peligrosa si su altura es mayor a 5000 y mantiene vacuna
+override method esDestinoPeligroso()= super() && altura > 5000
+
+//las montañas siempre son destinos destacados
+method esDestinoDestacado()=true
+
 }
 
-class CiudadHistorica inherits Localidad {
-	var cantidadDeMuseos
-	
+class CiudadHistorica inherits Localidad{
+var property cantidadMuseos
 	constructor(unPrecio,equipaje,unNombre,unKilometro,museos) = super(unPrecio,equipaje,unNombre,unKilometro) {
-		cantidadDeMuseos = museos }
-	
-	override method esDestinoPeligroso() = equipajes.any({ equipaje => equipaje.contains("seguro de asistencia") })//============    verificar este    ==============
-	override method esImportante() = super() && self.tieneMuchosMuseos()
-	method tieneMuchosMuseos() = cantidadDeMuseos > 3
+		cantidadMuseos = museos }
+//no es peligrosa siempre que se lleve el seguro de asistencia al viajero
+override method esDestinoPeligroso()= self.contieneEquipaje("seguro de asistencia al viajero")
+//es destino destacado si su precio es mayor a 2000 y tiene al menos 3 museos
+method esDestinoDestacado()= self.esImportante() && self.tieneAlMenosTresMuseos()
+
+method tieneAlMenosTresMuseos()= cantidadMuseos >= 3
+
+
 }
 
