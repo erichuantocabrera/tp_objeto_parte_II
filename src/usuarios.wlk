@@ -19,16 +19,16 @@ class Usuario{
    		perfil = unPerfil }
    		
    	method realizarViaje(unDestino) { const unViaje = barrileteCosmico.armaViaje(self,unDestino)
-									  if(self.puedeViajar(unViaje))
-									  {
-											viajesQueRealizo.add(unViaje)
-											dineroQueCuenta = dineroQueCuenta - unViaje.calcularPrecioViaje()
-											localidadDeOrigen = unViaje.destino()		
-									  }
-									  else 
-									  {
-											throw new UserExceptionEstoyPobre(message = "viaje demasiado caro eliga otro porfavor") 
-									  } }
+	if(self.puedeViajar(unViaje))
+	 {
+		viajesQueRealizo.add(unViaje)
+		dineroQueCuenta = dineroQueCuenta - unViaje.calcularPrecioViaje()
+		localidadDeOrigen = unViaje.destino()		
+	}
+	 else  {
+	throw new UserExceptionEstoyPobre(message = "viaje demasiado caro eliga otro porfavor") 
+         }
+	}
  	method obtenerKilometros() = viajesQueRealizo.sum({ viaje => viaje.distanciaARecorrer() })
  	method seguirUsuario(usuario) { self.agregarUsuario(usuario)
 									usuario.agregarUsuario(self) }  	
