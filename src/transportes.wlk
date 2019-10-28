@@ -16,7 +16,7 @@ class Avion inherits Transporte {
 		cantidadDeTurbinas = unaCantidad
 		turbina = unaTurbina	}
 	
-	override method costoPorKilometro() = cantidadDeTurbinas * turbina.nivelDeImpuslo()
+	override method costoPorKilometro() = cantidadDeTurbinas * turbina.nivelDeImpulso()
 }
 
 class Micro inherits Transporte {

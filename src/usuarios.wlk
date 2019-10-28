@@ -19,16 +19,16 @@ class Usuario{
    		perfil = unPerfil }
    		
    	method realizarViaje(unDestino) { const unViaje = barrileteCosmico.armaViaje(self,unDestino)
-	if(self.puedeViajar(unViaje))
-	 {
-		viajesQueRealizo.add(unViaje)
-		dineroQueCuenta = dineroQueCuenta - unViaje.calcularPrecioViaje()
-		localidadDeOrigen = unViaje.destino()		
-	}
-	 else  {
-	throw new UserExceptionEstoyPobre(message = "viaje demasiado caro eliga otro porfavor") 
-         }
-	}
+									  if(self.puedeViajar(unViaje))
+									  {
+											viajesQueRealizo.add(unViaje)
+											dineroQueCuenta = dineroQueCuenta - unViaje.calcularPrecioViaje()
+											localidadDeOrigen = unViaje.destino()		
+									  }
+									  else 
+									  {
+											throw new UserExceptionEstoyPobre(message = "viaje demasiado caro eliga otro porfavor") 
+									  } }
  	method obtenerKilometros() = viajesQueRealizo.sum({ viaje => viaje.distanciaARecorrer() })
  	method seguirUsuario(usuario) { self.agregarUsuario(usuario)
 									usuario.agregarUsuario(self) }  	
@@ -45,7 +45,7 @@ object empresarial {
 	var transportes = []
 	
 	method transportes(masTransportes) { transportes = masTransportes } 
-	method transporte() = transportes.max({ transporte => transporte.tiempo() })
+	method transporte() = transportes.min({ transporte => transporte.tiempo() })
 }
 
 object estudiantil {// verificar el de estudiante ==================
