@@ -24,6 +24,14 @@ describe "test el BarrileteCosmico" {
 	const viajeAGarlicSeaEnAvion = new Viaje(casaDeHari,garlicSea,avion)
 	const viajeASilverSeaEnAvion = new Viaje(casaDeHari,silverSea,avion)
 	
+	/*=================================================
+    const everest = new Montania (3000,["Vacuna B"],"everest",200,5500)
+    const cancun = new Playa (3000,["Vacuna B"],"everest",200,5500)
+    const paris = new CiudadHistorica()
+    
+     
+    * =================================== */
+	
 	fixture{
 		barrileteCosmico.mediosDeTransporte([colectivo,avion,flota])
 		barrileteCosmico.destinos([garlicSea,silverSea,lastToninas,goodAirs])
@@ -103,5 +111,20 @@ describe "test el BarrileteCosmico" {
 	test "agregado_de_viaje_a_esteban (para_ver_si_funciona_correctamente_el_armado_de_viajes_de_barrileteCosmico)" {
 		esteban.realizarViaje(goodAirs)
 		assert.equals(1,esteban.cantidadDeViajes())	}
+		
+	/* 	test "el everest es si un destino peligroso"{	
+		assert.that(everest.esDestinoPeligroso())
+	}
+	test "la playa No es un destino peligroso"{	
+		assert.that(cancun.esDestinoPeligroso())
+	}
+	
+	test "la ciudad historica de paris es destacada"{
+		assert.that(paris.esDestacada())
+	}
+	test "el everest es un destino destacado"{
+		assert.that(everest.esDestacado())
+	}
+*/
 	
 }
