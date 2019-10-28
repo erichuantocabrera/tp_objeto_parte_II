@@ -12,7 +12,7 @@ object barrileteCosmico{
 	method cartaDeDestinos() = destinos.map({destino => destino.nombre()})
 	method destinosPeligrosos() = destinos.filter({destino => destino.esDestinoPeligroso() })
 	
-	method armaViaje(usuario, destino) = new Viaje(usuario.localidadDeOrigen(), destino, mediosDeTransporte.anyOne())
+	method armaViaje(usuario, destino) = new Viaje(usuario.localidadDeOrigen(), destino, usuario.perfil().transporte() )
 	
 }
 
