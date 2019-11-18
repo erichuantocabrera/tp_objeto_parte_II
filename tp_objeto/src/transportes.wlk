@@ -1,22 +1,24 @@
 class Transporte {
 	var tiempo 
+	
 	constructor(unTiempo) {
 		tiempo = unTiempo}
 
 	method costoPorDistancia(distancia) = distancia * self.costoPorKilometro()
-	method costoPorKilometro() // ==== verificar este ========
+	method costoPorKilometro()
 	method tiempo() = tiempo
 }
 
 class Avion inherits Transporte {
-	var cantidadDeTurbinas 
-	var turbina
+	var turbinas
 	
-	constructor(unTiempo,unaCantidad,unaTurbina) = super(unTiempo) {
-		cantidadDeTurbinas = unaCantidad
-		turbina = unaTurbina	}
+	constructor(unTiempo,unasTurbina) = super(unTiempo) {
+		turbinas = unasTurbina	}
+		
+	override method costoPorKilometro() = turbinas.sum({turbina => turbina.nivelDeImpulso()})
 	
-	override method costoPorKilometro() = cantidadDeTurbinas * turbina.nivelDeImpulso()
+	method agregarTurbina(unaTurbina) {turbinas.add(unaTurbina)}
+	
 }
 
 class Micro inherits Transporte {
@@ -24,9 +26,8 @@ class Micro inherits Transporte {
 }
 
 class Tren inherits Transporte {
-	var costoPorMilla = 2300 //======== verificar este =============
 	
-	override method costoPorKilometro() = costoPorMilla * (1/0.62137)
+	override method costoPorKilometro() = 0.621*2300// se hizo una conversion de millas a kilometros
 }
 
 class Barco inherits Transporte {
@@ -44,5 +45,5 @@ class Turbina {
 	constructor(impulso) {
 		nivelDeImpulso = impulso }
 	
-	method nivelDeImpulso() = nivelDeImpulso // ==========    verificar este   ===========
+	method nivelDeImpulso() = nivelDeImpulso
 }

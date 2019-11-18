@@ -1,9 +1,9 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: jeje
+Bundle-Name: tp_objeto
 Bundle-Vendor: My Company
 Bundle-Version: 1.0.0.qualifier
-Bundle-SymbolicName: jeje; singleton:=true
+Bundle-SymbolicName: tp_objeto; singleton:=true
 Bundle-ActivationPolicy: lazy
 Require-Bundle: com.ibm.icu,
  org.eclipse.xtext,
@@ -11,8 +11,6 @@ Require-Bundle: com.ibm.icu,
  org.eclipse.xtend,
  org.eclipse.xtend.typesystem.emf,
  org.eclipse.xpand,
- de.itemis.xtext.antlr;resolution:=optional,
- org.eclipse.emf.mwe2.launch;resolution:=optional,
  org.uqbar.project.wollok,
  org.uqbar.project.wollok.launch,
  org.uqbar.project.wollok.lib,

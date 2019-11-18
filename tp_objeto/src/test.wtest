@@ -16,8 +16,9 @@ describe "test el BarrileteCosmico" {
 	const goodAirs = new Localidad(1500,["Cerveza","Protector Solar"],"Good Airs",20)
 	
 	const turboReactor = new Turbina(20)
+	const turboPawer = new Turbina(40)
 	
-	const americanAirlines = new Avion(50,4,turboReactor)
+	const americanAirlines = new Avion(50,[turboReactor,turboPawer])
 	const condorbus = new Micro (300)
 	const trenRoca = new Tren(100)
 	const titanic = new Barco(150,10)
@@ -38,10 +39,6 @@ describe "test el BarrileteCosmico" {
 	fixture{
 		barrileteCosmico.mediosDeTransporte([americanAirlines,condorbus,trenRoca,titanic])
 		barrileteCosmico.destinos([garlicSea,silverSea,lastToninas,goodAirs])
-		empresarial.transportes([americanAirlines,condorbus,trenRoca,titanic])
-		estudiantil.transportes([americanAirlines,condorbus,trenRoca,titanic])
-		familiar.transportes([americanAirlines,condorbus,trenRoca,titanic])
-		
 	}
 	
 	
@@ -138,16 +135,19 @@ describe "test el BarrileteCosmico" {
 		assert.notThat(cancun.esDestinoPeligroso()) }
 	
 	test "la_ciudad_historica_de_paris_es_destacada"{
-		assert.that(paris.esImportante()) }
+		assert.that(paris.esDestacado()) }
 		
 	test "el_everest_es_un_destino_destacado"{
-		assert.that(everest.esImportante()) }
+		assert.that(everest.esDestacado()) }
+		
+	test "el_costo_por_kilometro_del_avion_americanAirlans" {
+		assert.equals(60,americanAirlines.costoPorKilometro())	}
 		
 	test "pablo_hari_no_puede_viajar_a_cancun_en_avion" {
 		assert.notThat(pabloHari.puedeViajar(viajeACancunEnAvion)) }
 		
 	test "esteban_como_es_millonario_y_empresario_su_transporte_es_el_mas_Rapido_(avion)" {
-		assert.equals(americanAirlines,esteban.perfil().transporte() ) }
+		assert.equals(americanAirlines,esteban.elegirTransporte(barrileteCosmico.mediosDeTransporte(),paris) ) }
 	
 	test "esteban_realiza_el_viaje_a_cancun_en_avion" {
 		esteban.realizarViaje(cancun)
@@ -155,7 +155,7 @@ describe "test el BarrileteCosmico" {
 	
 	test "luego_de_realizar_su_viaje_a_cancun_a_esteban_le_queda_982600" {
 		esteban.realizarViaje(cancun)
-		assert.equals(982600,esteban.dineroQueCuenta())	}
+		assert.equals(986600,esteban.dineroQueCuenta())	}
 		
 	test "luego_de_viajar_a_cancun_y_al_everest_se_queda_en_el_everest" {
 		esteban.realizarViaje(cancun)

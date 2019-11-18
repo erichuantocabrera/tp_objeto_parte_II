@@ -5,14 +5,14 @@ object barrileteCosmico{
 	var property usuarios = []
 	var property mediosDeTransporte = []
 	
-	method destinosImportantes() = destinos.filter({destino => destino.esImportante()})
+	method destinosImportantes() = destinos.filter({destino => destino.esDestacado()})
 	method aplicarDescuentosADestinos(descuento){
 		destinos.forEach({destino => destino.darDescuento(descuento)}) }
 	method esEmpresaExtrema() = destinos.any({destino => destino.esDestinoPeligroso()})
 	method cartaDeDestinos() = destinos.map({destino => destino.nombre()})
 	method destinosPeligrosos() = destinos.filter({destino => destino.esDestinoPeligroso() })
 	
-	method armaViaje(usuario, destino) = new Viaje(usuario.localidadDeOrigen(), destino, usuario.perfil().transporte() )
+	method armaViaje(usuario, destino) = new Viaje(usuario.localidadDeOrigen(), destino,  usuario.elegirTransporte(mediosDeTransporte,destino) )
 	
 }
 

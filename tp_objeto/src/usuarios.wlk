@@ -18,17 +18,14 @@ class Usuario{
    		nombreDeUsuario	= usuario
    		perfil = unPerfil }
    		
-   	method realizarViaje(unDestino) { const unViaje = barrileteCosmico.armaViaje(self,unDestino)
-									  if(self.puedeViajar(unViaje))
-									  {
-											viajesQueRealizo.add(unViaje)
-											dineroQueCuenta = dineroQueCuenta - unViaje.calcularPrecioViaje()
-											localidadDeOrigen = unViaje.destino()		
-									  }
-									  else 
-									  {
-											throw new UserExceptionEstoyPobre(message = "viaje demasiado caro eliga otro porfavor") 
-									  } }
+   	method realizarViaje(unDestino) {
+   		const unViaje = barrileteCosmico.armaViaje(self,unDestino)
+		if(self.puedeViajar(unViaje))  {
+			viajesQueRealizo.add(unViaje)
+			dineroQueCuenta = dineroQueCuenta - unViaje.calcularPrecioViaje()
+			localidadDeOrigen = unViaje.destino()  }
+		else  {
+			throw new UserExceptionEstoyPobre(message = "viaje demasiado caro eliga otro porfavor")  } }
  	method obtenerKilometros() = viajesQueRealizo.sum({ viaje => viaje.distanciaARecorrer() })
  	method seguirUsuario(usuario) { self.agregarUsuario(usuario)
 									usuario.agregarUsuario(self) }  	
@@ -38,27 +35,27 @@ class Usuario{
 	method cambiarPerfilA(nuevoPerfil) { perfil = nuevoPerfil }
 	method perfil() = perfil
    	
+   	
+   	method elegirTransporte(transportes,destino){
+		return perfil.transporte(transportes,localidadDeOrigen.distanciaHasta(destino),dineroQueCuenta)  }
+
 }
 
 
 object empresarial {
-	var transportes = []
 	
-	method transportes(masTransportes) { transportes = masTransportes } 
-	method transporte() = transportes.min({ transporte => transporte.tiempo() })
+	method transporte(transportes,distancia,dineroCuenta) = transportes.min({ transporte => transporte.tiempo() })
+
 }
 
-object estudiantil {// verificar el de estudiante ==================
-	var transportes = []
-	var dinero = 10000 //==== revisar este ========== como le asigno el dinero del usuario???
-	
-	method transportes(masTransportes) { transportes = masTransportes }
-	method transporte() = (   transportes.filter({ transporte => transporte.tiempo() < dinero })  ).min({ transport => transport.tiempo() })
+object estudiantil {
+
+	method transporte(transportes,distancia,dineroCuenta) = (self.quitarTransportesCaros(transportes,distancia,dineroCuenta)).min({ transport => transport.tiempo() })
+	method quitarTransportesCaros(transportes,distancia,dinero) = transportes.filter({ transporte => transporte.costoPorDistancia(distancia) < dinero })
 }
 
 object familiar {
-	var transportes = []
 	
-	method transportes(masTransportes) { transportes = masTransportes } 
-	method transporte() = transportes.anyOne()
+	method transporte(transportes,distancia,dineroCuenta) = transportes.anyOne()
+
 }

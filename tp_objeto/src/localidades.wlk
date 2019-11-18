@@ -17,13 +17,15 @@ class Localidad {
 		equipajes.add("Certificado de descuento")}
 	method esDestinoPeligroso() = equipajes.any({ equipaje => equipaje.contains('Vacuna') })
 	method contieneEquipaje(unaCosa) = equipajes.contains(unaCosa) 
-	method esImportante() = precio > 2000
+	method esDestacado() = precio > 2000
 	method distanciaHasta(localidad) = (kilometroDeUbicacion - localidad.kilometroDeUbicacion()).abs()
 	method precio() = precio
 }
 
 class Playa inherits Localidad {
+	
 	override method esDestinoPeligroso() = false
+	
 }
 
 class Montania inherits Localidad {
@@ -34,7 +36,7 @@ class Montania inherits Localidad {
 		
 	override method esDestinoPeligroso() = super() && (self.siEsMontaniaAlta())
 	method siEsMontaniaAlta() = alturaDeMontania > 5000
-	override method esImportante() = true
+	override method esDestacado() = true
 }
 
 class CiudadHistorica inherits Localidad {
@@ -44,7 +46,7 @@ class CiudadHistorica inherits Localidad {
 		cantidadDeMuseos = museos }
 	
 	override method esDestinoPeligroso() = equipajes.any({ equipaje => equipaje.contains("seguro de asistencia") })//============    verificar este    ==============
-	override method esImportante() = super() && self.tieneMuchosMuseos()
+	override method esDestacado() = super() && self.tieneMuchosMuseos()
 	method tieneMuchosMuseos() = cantidadDeMuseos > 3
 }
 
